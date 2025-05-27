@@ -113,7 +113,7 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 git clone https://github.com/Khiladi124/HealthCare-management-with-Blockchain.git
-cd Healthcare Management with Blockchain
+cd Healthcare-management-with-Blockchain
 ```
 
 ### 2️⃣ Install Dependencies
@@ -253,7 +253,7 @@ We love contributions! Here's how you can help make this project better:
 
 1. **🍴 Fork the repository**
    ```bash
-   gh repo fork https://github.com/your-username/project-management
+   gh repo fork https://github.com/Khiladi124/HealthCare-management-with-Blockchain.git
    ```
 
 2. **🌿 Create a feature branch**
