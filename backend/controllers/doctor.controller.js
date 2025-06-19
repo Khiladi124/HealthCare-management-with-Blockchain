@@ -3,9 +3,11 @@ import Doctor from '../models/doctor.model.js';
 import Patient from '../models/patient.model.js';
 import Report from '../models/report.model.js';
 import Appointment from '../models/appointment.model.js';
+import Notification from '../models/notification.model.js'
 import {ApiError} from '../utils/apiError.js';
 import {ApiResponse} from '../utils/apiResponse.js';
 import {asyncHandler} from '../utils/asyncHandler.js';
+import { stat } from "fs";
 
 
 const generateAccessAndRefreshToken = async (_id) => {
@@ -139,8 +141,15 @@ export const addReportToPatient = asyncHandler(async (req, res) => {
         if (!report) {
             throw new ApiError(500, "Failed to create report");
         }
-
+        
         patient.reports.push(report._id);
+       
+        const notification=await Notification.create({
+            message:`you have report from ${doctor.name} for ${reportType}`,
+            type:'report',
+            
+        });
+        patient.notifications.push(notification._id);
         await patient.save({session});
 
         await session.commitTransaction();
@@ -185,7 +194,7 @@ export const updateAppointmentStatus = asyncHandler(async (req, res) => {
     session.startTransaction();
     try {
         const {doctorId, appointmentId} = req.params;
-        const {status} = req.body;
+        const {status,appointmentTime} = req.body;
         console.log("Updating appointment status for Doctor ID:", doctorId, "Appointment ID:", appointmentId);
         if (!doctorId || !appointmentId || !status) {
             throw new ApiError(400, "Doctor ID, Appointment ID and status are required");
@@ -198,13 +207,28 @@ export const updateAppointmentStatus = asyncHandler(async (req, res) => {
         if (!doctor) {
             throw new ApiError(404, "Doctor not found");
         }
-
+        if(status !== 'pending' &&!appointmentTime) {
+            throw new ApiError(400, "Appointment time is required for confirmed or cancelled status");
+        }
         const appointment = await Appointment.findById(appointmentId);
         if (!appointment) {
             throw new ApiError(404, "Appointment not found");
         }
 
         appointment.status = status;
+        if(appointmentTime) {
+            appointment.appointmentTime = appointmentTime;
+        }
+        const patient = await Patient.findById(appointment.patientId);
+        if (!patient) {
+            throw new ApiError(404, "Patient not found");
+        }
+        const notification = await Notification.create({
+            message:"Your appointment status has been updated to " + status,
+            type: 'appointment',
+        });
+        patient.notifications.push(notification._id);
+        await patient.save({session});
         await appointment.save({session});
 
         await session.commitTransaction();

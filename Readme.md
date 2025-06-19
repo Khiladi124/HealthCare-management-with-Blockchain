@@ -328,7 +328,7 @@ MIT License - Feel free to use this project for personal or commercial purposes!
 
 ### 🌟 If you found this project helpful, please give it a star!
 
-[![Star this repo](https://img.shields.io/github/stars/your-username/project-management?style=social)](https://github.com/Khiladi124/HealthCare-management-with-Blockchain.git)
+[![Star this repo](https://img.shields.io/github/stars/your-username/project-management?style=social)](https://github.com/Khiladi124/HealthCare-management-with-Blockchain.git/)
 
 **Made with ❤️ for the project management community**
 

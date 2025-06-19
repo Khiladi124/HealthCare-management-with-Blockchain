@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Patient from '../models/patient.model.js';
 import Report from '../models/report.model.js';
 import Appointment from '../models/appointment.model.js';
+import Notification from '../models/notification.model.js'
 import {ApiError} from '../utils/apiError.js';
 import {ApiResponse} from '../utils/apiResponse.js';
 import {asyncHandler} from '../utils/asyncHandler.js';
@@ -262,6 +263,15 @@ const askAppointment = asyncHandler(async (req, res) => {
             throw new ApiError(404, "Doctor not found");
         }
         doctor.appointments.push(appointment._id);
+       
+        const notification =await Notification.create({
+            message:`${patientMobile} have asked for appointment on ${appointmentDate}`,
+            type:'appointment'
+        });
+        
+        doctor.notifications.push(notification._id);
+        await notification.save();
+
         await doctor.save();
         console.log("Appointment created:", appointment);
         return res.status(201).json(new ApiResponse(201, appointment, "Appointment requested successfully"));

@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Report from './report.model.js';
 import  Appointment from './appointment.model.js';
+import { type } from 'os';
 
 const  patientSchema = new Schema({
     walletAddress: {
@@ -69,7 +70,12 @@ const  patientSchema = new Schema({
     refreshToken:{
         type: String,
         default: null,
-    }
+    },
+   notifications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification',
+    }],
+    
 });
 
 

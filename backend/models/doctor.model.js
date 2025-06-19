@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { type } from 'os';
 
 const doctorSchema = new Schema({
     walletAddress: {
@@ -62,11 +63,26 @@ const doctorSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    notifications: {
+       type: [{
+         type:mongoose.Schema.Types.ObjectId,
+         ref: 'Notification'
+         }],
+        default: [],
+    },
     appointments:{
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],
         default: [],
     }
-}); 
+});
+
+// Middleware to limit notifications array size
+doctorSchema.pre('save', function(next) {
+    if (this.notifications && this.notifications.length > 100) {
+        this.notifications = this.notifications.slice(-100);
+    }
+    next();
+});
 // Hash the password before saving
 doctorSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {

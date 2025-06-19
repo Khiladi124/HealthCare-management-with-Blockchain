@@ -1,6 +1,8 @@
 import mongoose ,{ Schema } from 'mongoose';
 import  Patient  from './patient.model.js';
 import  Doctor  from './doctor.model.js';
+import { appendFile } from 'fs';
+import { type } from 'os';
 
 
 const appointmentSchema = new Schema({
@@ -17,6 +19,9 @@ const appointmentSchema = new Schema({
     appointmentDate: {
         type: Date,
         required: true
+    },
+    appointmentTime: {
+        type: String
     },
     pateintMobile:{
         type: String,
