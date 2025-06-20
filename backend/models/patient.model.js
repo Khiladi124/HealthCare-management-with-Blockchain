@@ -71,10 +71,13 @@ const  patientSchema = new Schema({
         type: String,
         default: null,
     },
-   notifications: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification',
-    }],
+    notifications: {
+          type: [{
+            _id:{type:mongoose.Schema.Types.ObjectId, ref: 'Notification'},
+            message: { type: String, required: true },
+            }],
+           default: [],
+       },
     
 });
 

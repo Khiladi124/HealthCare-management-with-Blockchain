@@ -65,8 +65,8 @@ const doctorSchema = new Schema({
     },
     notifications: {
        type: [{
-         type:mongoose.Schema.Types.ObjectId,
-         ref: 'Notification'
+         _id:{type:mongoose.Schema.Types.ObjectId, ref: 'Notification'},
+         message: { type: String, required: true },
          }],
         default: [],
     },

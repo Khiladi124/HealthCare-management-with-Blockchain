@@ -149,7 +149,7 @@ export const addReportToPatient = asyncHandler(async (req, res) => {
             type:'report',
             
         });
-        patient.notifications.push(notification._id);
+        patient.notifications.push({_id:notification._id, message: notification.message});
         await patient.save({session});
 
         await session.commitTransaction();
@@ -227,7 +227,8 @@ export const updateAppointmentStatus = asyncHandler(async (req, res) => {
             message:"Your appointment status has been updated to " + status,
             type: 'appointment',
         });
-        patient.notifications.push(notification._id);
+        notification.save({session});
+        patient.notifications.push({_id:notification._id, message: notification.message});
         await patient.save({session});
         await appointment.save({session});
 

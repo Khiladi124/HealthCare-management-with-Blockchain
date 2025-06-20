@@ -269,7 +269,7 @@ const askAppointment = asyncHandler(async (req, res) => {
             type:'appointment'
         });
         
-        doctor.notifications.push(notification._id);
+        doctor.notifications.push({_id:notification._id, message: notification.message});
         await notification.save();
 
         await doctor.save();
@@ -307,6 +307,13 @@ const deleteAppointment = asyncHandler(async (req, res) => {
         await doctor.save();
         patient.appointments = patient.appointments.filter(app => app.toString() !== appointmentId);
         await patient.save();
+        const notification = await Notification.create({
+            message: `Your appointment with ${patient.name} on ${appointment.appointmentDate} has been cancelled.`,
+            type: 'appointment'
+        });
+        doctor.notifications.push({ _id: notification._id, message: notification.message });
+        await notification.save();
+        await doctor.save();
         await Appointment.findByIdAndDelete(appointmentId);
         console.log("Appointment deleted:", appointment);
         console.log("Appointment deleted successfully:", appointment);
