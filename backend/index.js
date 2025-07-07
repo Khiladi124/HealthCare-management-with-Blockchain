@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import patientRouter from './routes/patientRoutes.js';
 import doctorRouter from './routes/doctorRoutes.js';
 import notificationRouter from './routes/notificationRoutes.js';
+import medicineRouter from './routes/medicineRoutes.js';
 
 dotenv.config({path: './.env'});
 
@@ -32,6 +33,7 @@ app.get('/', (req, res) => {
 app.use('/api/patients', patientRouter);
 app.use('/api/doctors', doctorRouter);
 app.use('/api/notifications', notificationRouter);
+app.use('/api/medicines', medicineRouter);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
